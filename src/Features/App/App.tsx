@@ -40,7 +40,7 @@ const supportedBrowsers = ["chrome", "firefox", "safari", "edge"];
 
 export default function App() {
   const [shouldShowBrowserWarning, setShouldShowBrowserWarning] = useState(
-    !supportedBrowsers.includes(browser?.name || "")
+    !supportedBrowsers.includes(browser?.name ?? "")
   );
   const [isTutorialActive, setIsTutorialActive] = useState(false);
   const [showActivatePlatform, setShowActivatePlatform] = React.useState(false);
@@ -108,10 +108,7 @@ export default function App() {
       </Suspense>
     );
   }
-  /**
-   * Team Detailed
-   */
-
+      
   if (hasData) {
     return (
       <FlagsProvider features={{ standalone: PRODUCT_STANDALONE }}>
