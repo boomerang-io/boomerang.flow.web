@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import cx from "classnames";
 import { ComposedModal } from "@boomerang-io/carbon-addons-boomerang-react";
 import { Toggle } from "@boomerang-io/carbon-addons-boomerang-react";
@@ -7,18 +6,18 @@ import { ModalBody } from "@boomerang-io/carbon-addons-boomerang-react";
 import { LazyLog, ScrollFollow } from "react-lazylog";
 import { serviceUrl } from "Config/servicesConfig";
 import { PRODUCT_SERVICE_ENV_URL } from "Config/servicesConfig";
+import { ModalTriggerProps } from "Types";
 import styles from "./taskExecutionLog.module.scss";
 
 const DEV_STREAM_URL =
   "https://gist.githubusercontent.com/helfi92/96d4444aa0ed46c5f9060a789d316100/raw/ba0d30a9877ea5cc23c7afcd44505dbc2bab1538/typical-live_backing.log";
 
-TaskExecutionLog.propTypes = {
-  flowActivityId: PropTypes.string.isRequired,
-  flowTaskId: PropTypes.string.isRequired,
-  flowTaskName: PropTypes.string.isRequired,
-};
-
-export default function TaskExecutionLog({ flowActivityId, flowTaskId, flowTaskName }) {
+interface TaskExecutionLogProps {
+  flowActivityId: string;
+  flowTaskId: string;
+  flowTaskName: string;
+}
+const TaskExecutionLog: React.FC<TaskExecutionLogProps> = ({ flowActivityId, flowTaskId, flowTaskName }) => {
   const [follow, setFollow] = React.useState(true);
   const [error, setError] = React.useState(false);
 
@@ -32,7 +31,7 @@ export default function TaskExecutionLog({ flowActivityId, flowTaskId, flowTaskN
         title: "Execution Log",
         label: `${flowTaskName}`,
       }}
-      modalTrigger={({ openModal }) => (
+      modalTrigger={({ openModal }: ModalTriggerProps) => (
         <button className={styles.trigger} onClick={openModal}>
           View Log
         </button>
@@ -42,7 +41,7 @@ export default function TaskExecutionLog({ flowActivityId, flowTaskId, flowTaskN
         <ModalBody>
           <ScrollFollow
             startFollowing={true}
-            render={({ onScroll }) => (
+            render={({ onScroll }: { onScroll: Function }) => (
               <>
                 <div className={styles.followToggle}>
                   <label
@@ -65,8 +64,9 @@ export default function TaskExecutionLog({ flowActivityId, flowTaskId, flowTaskN
                     PRODUCT_SERVICE_ENV_URL.includes("localhost") ? { credentials: "omit" } : { credentials: "include" }
                   }
                   follow={follow}
+                  //@ts-ignore
                   onScroll={onScroll}
-                  onError={(err) => setError(err)}
+                  onError={(err: any) => setError(err)}
                   selectableLines={true}
                   stream={true}
                   url={
@@ -82,4 +82,6 @@ export default function TaskExecutionLog({ flowActivityId, flowTaskId, flowTaskN
       )}
     </ComposedModal>
   );
-}
+};
+
+export default TaskExecutionLog;

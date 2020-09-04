@@ -244,6 +244,7 @@ class TemplateConfigModalContent extends Component<TemplateConfigModalContentPro
             .test(
               "is-valid-key",
               "Only alphanumeric, underscore, dash, and period characters allowed",
+              //@ts-ignore
               this.validateKey
             ),
           [InputProperty.Label]: Yup.string()

@@ -6,14 +6,19 @@ import orderBy from "lodash/orderBy";
 import { getSimplifiedDuration } from "Utils/timeHelper";
 import { QueryStatus } from "Constants";
 import { executionStatusIcon, ExecutionStatusCopy } from "Constants";
+import { WorkflowDetailedActivityExecution } from "Types";
 import { Arrows32, ChevronLeft32 } from "@carbon/icons-react";
 import styles from "./executionTaskLog.module.scss";
 
-ExecutionTaskLog.propTypes = {
-  workflowExecution: PropTypes.object.isRequired,
-};
+interface ExecutionTaskLogProps {
+  workflowExecution: {
+    data: WorkflowDetailedActivityExecution;
+    status: string;
+    error: any;
+  };
+}
 
-function ExecutionTaskLog({ workflowExecution }) {
+const ExecutionTaskLog: React.FC<ExecutionTaskLogProps> = ({ workflowExecution }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [tasksSort, setTasksSort] = useState("desc");
 
@@ -27,7 +32,7 @@ function ExecutionTaskLog({ workflowExecution }) {
   const toggleSort = () => {
     setTasksSort(tasksSort === "desc" ? "asc" : "desc");
   };
-
+  //@ts-ignore
   const sortedTasks = steps ? orderBy(steps, (step) => step.order, [tasksSort]) : [];
 
   return (
@@ -81,6 +86,6 @@ function ExecutionTaskLog({ workflowExecution }) {
       </ul>
     </aside>
   );
-}
+};
 
 export default ExecutionTaskLog;

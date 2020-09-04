@@ -1,15 +1,23 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { ZoomIn16, ZoomOut16 } from "@carbon/icons-react";
 import styles from "./WorkflowZoom.module.scss";
 
-WorkflowZoom.propTypes = {
-  workflowDagEngine: PropTypes.object.isRequired,
-  workflowDagBoundingClientRect: PropTypes.object.isRequired,
-};
-
-export default function WorkflowZoom({ workflowDagEngine, workflowDagBoundingClientRect }) {
-  function handleZoomChange(zoomDelta) {
+interface WorkflowZoomProps {
+  workflowDagEngine: {
+    diagramEngine: {
+      repaintCanvas: Function;
+    };
+  };
+  workflowDagBoundingClientRect: {
+    left: number;
+    width: number;
+    height: number;
+    top: number;
+  };
+}
+const WorkflowZoom: React.FC<WorkflowZoomProps> = ({ workflowDagEngine, workflowDagBoundingClientRect }) => {
+  function handleZoomChange(zoomDelta: number) {
+    //@ts-ignore
     const diagramModel = workflowDagEngine.getDiagramEngine().getDiagramModel();
     const oldZoomFactor = diagramModel.getZoomLevel() / 100;
 
@@ -38,7 +46,7 @@ export default function WorkflowZoom({ workflowDagEngine, workflowDagBoundingCli
       diagramModel.getOffsetX() - widthDiff * xFactor,
       diagramModel.getOffsetY() - heightDiff * yFactor
     );
-
+    //@ts-ignore
     workflowDagEngine.getDiagramEngine().enableRepaintEntities([]);
     workflowDagEngine.diagramEngine.repaintCanvas();
   }
@@ -69,4 +77,6 @@ export default function WorkflowZoom({ workflowDagEngine, workflowDagBoundingCli
       </button>
     </div>
   );
-}
+};
+
+export default WorkflowZoom;

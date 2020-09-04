@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect, useRef } from "react";
 import { DiagramWidget } from "@projectstorm/react-diagrams";
 import { DelayedRender, Error, SkeletonPlaceholder, SkeletonText } from "@boomerang-io/carbon-addons-boomerang-react";

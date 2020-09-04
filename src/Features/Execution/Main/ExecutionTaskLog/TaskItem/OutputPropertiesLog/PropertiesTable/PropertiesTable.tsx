@@ -4,13 +4,24 @@ import { DataTable } from "@boomerang-io/carbon-addons-boomerang-react";
 import { NoDisplay } from "@boomerang-io/carbon-addons-boomerang-react";
 import styles from "./propertiesTable.module.scss";
 
-function PropertiesTable({ data: properties }) {
+interface PropertiesTableProps {
+  properties:
+    | [
+        {
+          key: string;
+          value: string;
+        }
+      ]
+    | object[];
+}
+
+const PropertiesTable: React.FC<PropertiesTableProps> = ({ properties }) => {
   const headers = [
     { header: "Property", key: "key" },
     { header: "Value", key: "value" },
   ];
 
-  const renderCell = (cellIndex, value) => {
+  const renderCell = (cellIndex: number, value: string) => {
     const column = headers[cellIndex];
 
     switch (column.header) {
@@ -29,12 +40,12 @@ function PropertiesTable({ data: properties }) {
         <DataTable
           rows={properties}
           headers={headers}
-          render={({ rows, headers, getHeaderProps }) => (
+          render={({ rows, headers, getHeaderProps }: { rows: any; headers: any; getHeaderProps: any }) => (
             <TableContainer>
               <Table>
                 <TableHead>
                   <TableRow className={styles.tableHeadRow}>
-                    {headers.map((header) => (
+                    {headers.map((header: any) => (
                       <TableHeader
                         id={header.key}
                         {...getHeaderProps({
@@ -48,9 +59,9 @@ function PropertiesTable({ data: properties }) {
                   </TableRow>
                 </TableHead>
                 <TableBody className={styles.tableBody}>
-                  {rows.map((row) => (
+                  {rows.map((row: any) => (
                     <TableRow key={row.id} className={styles.tableRow}>
-                      {row.cells.map((cell, cellIndex) => (
+                      {row.cells.map((cell: any, cellIndex: number) => (
                         <TableCell key={cell.id}>
                           <div className={styles.tableCell}>{renderCell(cellIndex, cell.value)}</div>
                         </TableCell>
@@ -67,10 +78,6 @@ function PropertiesTable({ data: properties }) {
       )}
     </div>
   );
-}
-
-PropertiesTable.propTypes = {
-  data: PropTypes.array.isRequired,
 };
 
 export default PropertiesTable;

@@ -40,6 +40,33 @@ export interface FormikSetFieldValue {
   (id: string, value: string | [string] | boolean | undefined): void;
 }
 
+export interface WorkflowDetailedActivityExecution {
+  creationDate: string;
+  duration: number;
+  id: string;
+  initiatedByUserId: string;
+  initiatedByUserName: string;
+  properties: [];
+  status: string;
+  steps: [
+    {
+      activityId: string;
+      duration: number;
+      flowTaskStatus: string;
+      id: string;
+      order: number;
+      outputs: object;
+      startTime: string;
+      taskId: string;
+      taskName: string;
+    }
+  ];
+  teamName: string;
+  trigger: string;
+  workflowId: string;
+  workflowRevisionid: string;
+}
+
 export interface CreateWorkflowSummary {
   description: string;
   enableACCIntegration: boolean;

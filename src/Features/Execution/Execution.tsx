@@ -12,7 +12,7 @@ const getTaskTemplatesUrl = serviceUrl.getTaskTemplates();
 export default function ExecutionContainer() {
   const { workflowId, executionId } = useParams();
   const getSummaryUrl = serviceUrl.getWorkflowSummary({ workflowId });
-  const getRevisionUrl = serviceUrl.getWorkflowRevision({ workflowId });
+  const getRevisionUrl = serviceUrl.getWorkflowRevision({ workflowId, revisionNumber: null });
   const getExecutionUrl = serviceUrl.getWorkflowExecution({ executionId });
 
   /**
@@ -54,6 +54,7 @@ export default function ExecutionContainer() {
           workflowRevision: revisionData,
         }}
       >
+        {/*@ts-ignore*/}
         <Main dag={revisionData.dag} workflow={summaryQuery} workflowExecution={executionQuery} />
       </ExecutionContextProvider>
     );

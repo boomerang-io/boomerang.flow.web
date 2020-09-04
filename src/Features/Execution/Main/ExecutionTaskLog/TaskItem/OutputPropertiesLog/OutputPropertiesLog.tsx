@@ -1,18 +1,25 @@
 import React from "react";
-import PropTypes from "prop-types";
 import ReactJson from "react-json-view";
 import { ComposedModal, ModalForm } from "@boomerang-io/carbon-addons-boomerang-react";
 import { ModalBody, Tabs, Tab } from "@boomerang-io/carbon-addons-boomerang-react";
 import PropertiesTable from "./PropertiesTable";
+import { ModalTriggerProps } from "Types";
+
 import styles from "./outputPropertisLog.module.scss";
 
-function OutputPropertiesLog({ flowTaskName, flowTaskOutputs }) {
-  let arrayProps = [];
+interface OutputPropertiesLogProps {
+  flowTaskName: string;
+  flowTaskOutputs: object[] | {};
+}
+
+const OutputPropertiesLog: React.FC<OutputPropertiesLogProps> = ({ flowTaskName, flowTaskOutputs }) => {
+  let arrayProps: object[] = [];
   Object.keys(flowTaskOutputs).forEach(
     (val, index) =>
       (arrayProps = arrayProps.concat({
         id: `${val}-${index}`,
         key: val,
+        //@ts-ignore
         value: JSON.stringify(flowTaskOutputs[val], null, 2),
       }))
   );
@@ -28,7 +35,7 @@ function OutputPropertiesLog({ flowTaskName, flowTaskOutputs }) {
         title: "Output Properties",
         label: `${flowTaskName}`,
       }}
-      modalTrigger={({ openModal }) => (
+      modalTrigger={({ openModal }: ModalTriggerProps) => (
         <button className={styles.trigger} onClick={openModal}>
           View Properties
         </button>
@@ -39,7 +46,7 @@ function OutputPropertiesLog({ flowTaskName, flowTaskOutputs }) {
           <ModalBody>
             <Tabs>
               <Tab label="Table">
-                <PropertiesTable data={arrayProps} />
+                <PropertiesTable properties={arrayProps} />
               </Tab>
               <Tab label="JSON">
                 <div className={styles.propertiesJson}>
@@ -47,10 +54,10 @@ function OutputPropertiesLog({ flowTaskName, flowTaskOutputs }) {
                     name={false}
                     src={flowTaskOutputs}
                     displayDataTypes={false}
-                    enableDelete={false}
+                    // enableDelete={false}
                     displayObjectSize={false}
-                    enableEdit={false}
-                    enableAdd={false}
+                    // enableEdit={false}
+                    // enableAdd={false}
                   />
                 </div>
               </Tab>
@@ -60,11 +67,6 @@ function OutputPropertiesLog({ flowTaskName, flowTaskOutputs }) {
       )}
     </ComposedModal>
   );
-}
-
-OutputPropertiesLog.propTypes = {
-  flowTaskName: PropTypes.string.isRequired,
-  flowTaskOutputs: PropTypes.object.isRequired,
 };
 
 export default OutputPropertiesLog;

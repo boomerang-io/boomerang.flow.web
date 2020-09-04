@@ -1,19 +1,19 @@
 import React from "react";
-import PropTypes from "prop-types";
 import moment from "moment";
-import getHumanizedDuration from "@boomerang-io/utils/lib/getHumanizedDuration";
+import { getHumanizedDuration } from "@boomerang-io/utils";
 import { executionStatusIcon, ExecutionStatusCopy } from "Constants";
 import OutputPropertiesLog from "./OutputPropertiesLog";
 import TaskExecutionLog from "./TaskExecutionLog";
+import { WorkflowDetailedActivityExecution } from "Types";
 import styles from "./taskItem.module.scss";
 
-TaskItem.propTypes = {
-  flowActivityId: PropTypes.string.isRequired,
-  hidden: PropTypes.bool.isRequired,
-  task: PropTypes.object.isRequired,
-};
+interface TaskItemProps {
+  flowActivityId: string;
+  hidden: boolean;
+  task: WorkflowDetailedActivityExecution["steps"][0];
+}
 
-function TaskItem({ flowActivityId, hidden, task }) {
+const TaskItem: React.FC<TaskItemProps> = ({ flowActivityId, hidden, task }) => {
   const { duration, flowTaskStatus, id, outputs, startTime, taskId, taskName } = task;
   const Icon = executionStatusIcon[flowTaskStatus];
   const statusClassName = styles[flowTaskStatus];
@@ -41,7 +41,7 @@ function TaskItem({ flowActivityId, hidden, task }) {
         </div>
         <div className={styles.time}>
           <p className={styles.timeTitle}>Duration</p>
-          <time className={styles.timeValue}>{getHumanizedDuration(Math.round(parseInt(duration / 1000), 10))}</time>
+          <time className={styles.timeValue}>{getHumanizedDuration(Math.round(duration / 1000), 10)}</time>
         </div>
       </section>
       {!hidden && (
@@ -54,6 +54,6 @@ function TaskItem({ flowActivityId, hidden, task }) {
       )}
     </li>
   );
-}
+};
 
 export default TaskItem;

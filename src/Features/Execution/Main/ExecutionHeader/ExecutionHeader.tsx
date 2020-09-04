@@ -1,29 +1,44 @@
 import React from "react";
-import PropTypes from "prop-types";
-import { withRouter, Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { SkeletonPlaceholder } from "@boomerang-io/carbon-addons-boomerang-react";
 import { appLink } from "Config/appConfig";
 import FeatureHeader from "Components/FeatureHeader";
 import moment from "moment";
 import { QueryStatus } from "Constants";
+import { WorkflowSummary, WorkflowDetailedActivityExecution } from "Types";
 import styles from "./executionHeader.module.scss";
 
-ExecutionHeader.propTypes = {
-  workflow: PropTypes.object.isRequired,
-  workflowExecution: PropTypes.object.isRequired,
-};
+interface HeaderProps {
+  workflow: {
+    data: WorkflowSummary;
+    status: string;
+    error: any;
+  };
+  workflowExecution: {
+    data: WorkflowDetailedActivityExecution;
+    status: string;
+    error: any;
+  };
+}
 
-function ExecutionHeader({ history, workflow, workflowExecution }) {
+const ExecutionHeader: React.FC<HeaderProps> = ({ workflow, workflowExecution }) => {
+  const history = useHistory();
   const { state } = history.location;
+
   const { teamName, initiatedByUserName, trigger, creationDate } = workflowExecution.data;
+
+  //@ts-ignore
+  const fromUrl = state ? state.fromUrl : appLink.activity();
+  //@ts-ignore
+  const fromText = state ? state.fromText : "Activity";
 
   return (
     <FeatureHeader includeBorder>
       <div className={styles.container}>
         <section>
           <div className={styles.subtitle}>
-            <Link className={styles.activityLink} to={state ? state.fromUrl : appLink.activity()}>
-              {state ? state.fromText : "Activity"}
+            <Link className={styles.activityLink} to={fromUrl}>
+              {fromText}
             </Link>
             <p style={{ margin: "0 0.5rem" }}>/</p>
             {!workflow?.data?.name ? (
@@ -65,6 +80,6 @@ function ExecutionHeader({ history, workflow, workflowExecution }) {
       </div>
     </FeatureHeader>
   );
-}
+};
 
-export default withRouter(ExecutionHeader);
+export default ExecutionHeader;
